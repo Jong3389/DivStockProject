@@ -1,0 +1,106 @@
+/* App.css - 투자 시뮬레이터 맞춤형 스타일 */
+
+/* 1. 기본 레이아웃 및 폰트 부드럽게 설정 */
+:root {
+  --primary-blue: #2563eb;
+  --secondary-blue: #60a5fa;
+  --bg-light: #f9fafb;
+}
+
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--bg-light);
+}
+
+/* 2. 카드 및 위젯 애니메이션 */
+.rounded-xl {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.rounded-xl:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* 3. 요약 위젯 그라데이션 포인트 */
+.bg-blue-600 {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-blue-600::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* 4. 입력 폼 포커스 스타일 */
+input[type="number"], select {
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+input[type="number"]:focus, select:focus {
+  border-color: var(--primary-blue) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+/* 5. 버튼 인터랙션 */
+button {
+  transition: all 0.2s;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* 6. 추천 상품 카드 강조 */
+.cursor-pointer {
+  border: 2px solid transparent;
+}
+
+.hover\:border-blue-500:hover {
+  border-color: #3b82f6 !important;
+  background-color: rgba(59, 130, 246, 0.02);
+}
+
+.hover\:border-green-500:hover {
+  border-color: #22c55e !important;
+  background-color: rgba(34, 197, 94, 0.02);
+}
+
+.hover\:border-purple-500:hover {
+  border-color: #a855f7 !important;
+  background-color: rgba(168, 85, 247, 0.02);
+}
+
+/* 7. 차트 툴팁 스타일 커스텀 */
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+
+.recharts-default-tooltip {
+  border-radius: 8px !important;
+  border: none !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+  padding: 12px !important;
+}
+
+/* 8. 체크박스 커스텀 애니메이션 */
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
+/* 9. 반응형 여백 조정 */
+@media (max-width: 768px) {
+  .p-6 {
+    padding: 1rem;
+  }
+}
