@@ -1,111 +1,198 @@
+/* App.css - 중앙 정렬 (양옆 여백) 및 모던 핀테크(Fintech) 스타일 */
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  --surface: #ffffff;
+  --background: #f2f4f6;
+  --text-primary: #191f28;
+  --text-secondary: #8b95a1;
+  --primary: #3182f6;
+  --primary-hover: #1b64da;
+  --border: #e5e8eb;
+  --input-bg: #f2f4f6;
 }
 
 body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--background);
+  color: var(--text-primary);
   margin: 0;
+  padding: 0;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+/* --- 화면 중앙 배치 (양옆 여백 적용) --- */
+.max-w-6xl {
+  /* Tailwind의 max-w-6xl 대신 직접 최대 너비를 설정하고 중앙 정렬 */
+  max-width: 1200px;
+  width: 80%; /* 화면의 80%만 차지하게 하여 양옆에 약 10%씩 공백을 둠 */
+  margin: 0 auto; /* 좌우 마진을 auto로 설정하여 중앙 정렬 */
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+/* 768px 이하 모바일 환경에서는 90% 이상으로 넓혀 여백을 줄임 */
+@media (max-width: 768px) {
+  .max-w-6xl {
+    width: 92%;
   }
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+
+/* --- 1. 모던 입력 필드 (Input & Select) --- */
+input[type="number"], select {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background-color: var(--input-bg);
+  border: 1px solid transparent !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease-in-out;
+  appearance: none;
+  -webkit-appearance: none;
 }
-p {
+
+/* 커스텀 select 화살표 */
+select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b95a1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+/* 포커스 상태 */
+input[type="number"]:focus, select:focus {
+  background-color: var(--surface);
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 4px rgba(49, 130, 246, 0.15) !important;
+  outline: none;
+}
+
+/* 숫자 스피너 숨김 */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
   margin: 0;
 }
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
-code {
+/* 라벨 */
+label {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 8px;
+}
+
+/* --- 2. iOS 스타일 토글 스위치 --- */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 44px;
+  height: 24px;
+  background-color: #d1d6db;
+  border-radius: 24px;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.2s ease;
+  margin: 0;
+  vertical-align: middle;
+}
+
+input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--primary);
+}
+
+input[type="checkbox"]:checked::after {
+  transform: translateX(20px);
+}
+
+input[type="checkbox"] + label {
+  margin-bottom: 0;
+  margin-left: 10px;
+  color: var(--text-primary);
   font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  cursor: pointer;
+}
+
+/* --- 3. 카드 및 버튼 UI --- */
+.bg-white {
+  background-color: var(--surface);
+  border: 1px solid var(--border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03) !important;
+}
+
+button {
+  border-radius: 16px !important;
+  transition: all 0.2s;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+button.bg-blue-600 {
+  background: var(--primary);
+  box-shadow: none !important;
+}
+
+button.bg-blue-600:hover {
+  background: var(--primary-hover);
+}
+
+.bg-blue-600 {
+  background: var(--primary);
+}
+
+/* --- 4. 추천 상품 카드 --- */
+.cursor-pointer {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: all 0.2s;
+}
+
+.hover\:border-blue-500:hover {
+  border-color: var(--primary) !important;
+  background-color: rgba(49, 130, 246, 0.03);
+  transform: translateY(-2px);
+}
+
+.hover\:border-green-500:hover {
+  border-color: #22c55e !important;
+  background-color: rgba(34, 197, 94, 0.03);
+  transform: translateY(-2px);
+}
+
+.hover\:border-purple-500:hover {
+  border-color: #a855f7 !important;
+  background-color: rgba(168, 85, 247, 0.03);
+  transform: translateY(-2px);
+}
+
+/* --- 5. 차트 툴팁 --- */
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+.recharts-default-tooltip {
+  border-radius: 12px !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+  padding: 16px !important;
+  font-weight: 600;
 }

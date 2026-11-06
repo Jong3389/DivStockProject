@@ -99,16 +99,16 @@ export default function DividendCalculator() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* 왼쪽: 시뮬레이션 설정 패널 */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-          <div>
-            <h2 className="text-xl font-semibold mb-4">시뮬레이션 설정</h2>
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+          <div className="">
+            <h2 className="text-xl font-semibold mb-6">시뮬레이션 설정</h2>
 
-            <div className="space-y-4">
-              {/* 자산 선택 드롭다운 */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">투자 자산 선택</label>
+            <div className="space-y-10">
+              {/* 자산 선택 드롭다운 (Asset Selection) */}
+              <div className="flex flex-col space-y-2 input-group">
+                <label className="text-sm font-semibold text-gray-700">투자 자산 선택</label>
                 <select 
-                  className="w-full border-gray-300 rounded-lg p-2 border focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border-gray-300 rounded-lg p-2.5 border focus:ring-blue-500 focus:border-blue-500 bg-white"
                   value={selectedAsset}
                   onChange={(e) => setSelectedAsset(e.target.value)}
                 >
@@ -120,52 +120,57 @@ export default function DividendCalculator() {
                 </select>
               </div>
 
-              {/* 초기 투자금 입력 */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">초기 투자금 (원)</label>
+              {/* 초기 투자금 입력 (Initial Investment) */}
+              <div className="flex flex-col space-y-2 input-group">
+                <label className="text-sm font-semibold text-gray-700">초기 투자금 (원)</label>
                 <input 
                   type="number" 
-                  className="w-full border-gray-300 rounded-lg p-2 border focus:ring-blue-500"
+                  className="w-full border-gray-300 rounded-lg p-2.5 border focus:ring-blue-500"
                   value={principal}
                   onChange={(e) => setPrincipal(Number(e.target.value))}
                 />
               </div>
 
-              {/* 월 적립금 입력 */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">월 적립금 (원)</label>
+              {/* 월 적립금 입력 (Monthly Investment) */}
+              <div className="flex flex-col space-y-2 input-group">
+                <label className="text-sm font-semibold text-gray-700">월 적립금 (원)</label>
                 <input 
                   type="number" 
-                  className="w-full border-gray-300 rounded-lg p-2 border focus:ring-blue-500"
+                  className="w-full border-gray-300 rounded-lg p-2.5 border focus:ring-blue-500"
                   value={monthlyAddition}
                   onChange={(e) => setMonthlyAddition(Number(e.target.value))}
                 />
               </div>
 
-              {/* 재투자 여부 체크박스 */}
-              <div className="flex items-center pt-2">
-                <input 
-                  type="checkbox" 
-                  id="reinvest"
-                  className="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                  checked={isReinvest}
-                  onChange={(e) => setIsReinvest(e.target.checked)}
-                />
-                <label htmlFor="reinvest" className="ml-2 text-sm font-medium text-gray-800">
-                  배당금/이자 자동 재투자
-                </label>
+              {/* 재투자 여부 선택 (Reinvestment Selection) */}
+              <div className="flex flex-col space-y-2 py-4 border-y border-gray-50">
+                <label className="text-sm font-semibold text-gray-700">배당금/이자 자동 재투자 여부</label>
+                <div className="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors reinvestment-container" onClick={() => setIsReinvest(!isReinvest)}>
+                  <input 
+                    type="checkbox" 
+                    id="reinvest"
+                    className="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer"
+                    checked={isReinvest}
+                    onChange={(e) => setIsReinvest(e.target.checked)}
+                  />
+                  <label htmlFor="reinvest" className="ml-3 text-sm font-medium text-gray-800 cursor-pointer">
+                    {isReinvest ? "자동 재투자 활성화됨" : "자동 재투자 비활성화됨"}
+                  </label>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* 계산 실행 버튼 */}
-          <button 
-            onClick={handleCalculate}
-            className="mt-8 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-lg shadow-blue-200 flex items-center justify-center gap-2"
-          >
-            <TrendingUp className="w-5 h-5" />
-            시뮬레이션 계산하기
-          </button>
+          {/* 계산 실행 버튼 (Enlarged & Full Width inside panel) */}
+          <div className="mt-auto pt-10">
+            <button 
+              onClick={handleCalculate}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-6 px-8 rounded-xl transition-all shadow-xl shadow-blue-200 flex items-center justify-center gap-3 text-xl hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <TrendingUp className="w-7 h-7" />
+              시뮬레이션 계산하기
+            </button>
+          </div>
         </div>
 
         {/* 오른쪽: 결과 대시보드 및 차트 섹션 */}
