@@ -45,7 +45,7 @@ body {
 }
 
 /* 4. 입력 폼 스타일 및 너비 최적화 */
-input[type="number"], select {
+input[type="text"], select {
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
   width: 100%; /* 부모 컨테이너 너비에 맞춤 */
@@ -55,15 +55,23 @@ input[type="number"], select {
 .input-group {
   max-width: 400px;
   width: 100%;
+  margin: 0 auto;
+}
+
+/*가운데 이동시킬 그룹*/
+.center-group {
+  width: 100%;
+  margin: 0 auto;
 }
 
 /* 체크박스 컨테이너 너비 제한 */
 .reinvestment-container {
   max-width: 400px;
   width: 100%;
+  margin: 0 auto;
 }
 
-input[type="number"]:focus, select:focus {
+input[type="text"]:focus, select:focus {
   border-color: var(--primary-blue) !important;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
 }
@@ -71,6 +79,7 @@ input[type="number"]:focus, select:focus {
 /* 5. 버튼 인터랙션 */
 button {
   transition: all 0.2s;
+  width: 100%;
 }
 
 button:active {

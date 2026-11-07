@@ -19,8 +19,10 @@ const ASSET_DATA = [
 
 export default function DividendCalculator() {
   // --- 입력 상태 관리 (Input State) ---
-  const [principal, setPrincipal] = useState(10000000); // 초기 투자금 (단위: 원)
-  const [monthlyAddition, setMonthlyAddition] = useState(500000); // 월 적립금 (단위: 원)
+  const [principal, setPrincipal] = useState(1000); // 초기 투자금 (단위: 만원)
+  const [isPrincipalFocused, setIsPrincipalFocused] = useState(false); // 초기 투자금 필드 포커스 여부
+  const [monthlyAddition, setMonthlyAddition] = useState(50); // 월 적립금 (단위: 만원)
+  const [isMonthlyFocused, setIsMonthlyFocused] = useState(false); // 월 적립금 필드 포커스 여부
   const [selectedAsset, setSelectedAsset] = useState(ASSET_DATA[0].id); // 선택된 자산 ID
   const [isReinvest, setIsReinvest] = useState(true); // 배당금 재투자 여부
 
@@ -77,7 +79,7 @@ export default function DividendCalculator() {
    */
   const handleExportCSV = () => {
     if (results.length === 0) return;
-    const headers = "연도,총자산(원),당해배당금(원),누적배당금(원)\n";
+    const headers = "연도,총자산(만원),당해배당금(만원),누적배당금(만원)\n";
     const csvRows = results.map(d => `${d.year},${d.총자산},${d.당해배당금},${d.누적배당금}`);
     const blob = new Blob(["\uFEFF" + headers + csvRows.join("\n")], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -99,8 +101,8 @@ export default function DividendCalculator() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* 왼쪽: 시뮬레이션 설정 패널 */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
-          <div className="">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
+          <div className="w-full max-w-[400px]">
             <h2 className="text-xl font-semibold mb-6">시뮬레이션 설정</h2>
 
             <div className="space-y-10">
@@ -122,28 +124,40 @@ export default function DividendCalculator() {
 
               {/* 초기 투자금 입력 (Initial Investment) */}
               <div className="flex flex-col space-y-2 input-group">
-                <label className="text-sm font-semibold text-gray-700">초기 투자금 (원)</label>
+                <label className="text-sm font-semibold text-gray-700">초기 투자금 (만원)</label>
                 <input 
-                  type="number" 
+                  type="text" 
                   className="w-full border-gray-300 rounded-lg p-2.5 border focus:ring-blue-500"
-                  value={principal}
-                  onChange={(e) => setPrincipal(Number(e.target.value))}
+                  value={isPrincipalFocused ? (principal === 0 ? '' : principal.toString()) : principal.toLocaleString()}
+                  onFocus={() => setIsPrincipalFocused(true)}
+                  onBlur={() => setIsPrincipalFocused(false)}
+                  onChange={(e) => {
+                    // 숫자 이외의 문자 제거
+                    const val = e.target.value.replace(/[^0-9]/g, '');
+                    setPrincipal(val === '' ? 0 : parseInt(val, 10));
+                  }}
                 />
               </div>
 
               {/* 월 적립금 입력 (Monthly Investment) */}
               <div className="flex flex-col space-y-2 input-group">
-                <label className="text-sm font-semibold text-gray-700">월 적립금 (원)</label>
+                <label className="text-sm font-semibold text-gray-700">월 적립금 (만원)</label>
                 <input 
-                  type="number" 
+                  type="text" 
                   className="w-full border-gray-300 rounded-lg p-2.5 border focus:ring-blue-500"
-                  value={monthlyAddition}
-                  onChange={(e) => setMonthlyAddition(Number(e.target.value))}
+                  value={isMonthlyFocused ? (monthlyAddition === 0 ? '' : monthlyAddition.toString()) : monthlyAddition.toLocaleString()}
+                  onFocus={() => setIsMonthlyFocused(true)}
+                  onBlur={() => setIsMonthlyFocused(false)}
+                  onChange={(e) => {
+                    // 숫자 이외의 문자 제거
+                    const val = e.target.value.replace(/[^0-9]/g, '');
+                    setMonthlyAddition(val === '' ? 0 : parseInt(val, 10));
+                  }}
                 />
               </div>
 
               {/* 재투자 여부 선택 (Reinvestment Selection) */}
-              <div className="flex flex-col space-y-2 py-4 border-y border-gray-50">
+              <div className="flex flex-col space-y-2 py-4 border-y border-gray-50 input-group">
                 <label className="text-sm font-semibold text-gray-700">배당금/이자 자동 재투자 여부</label>
                 <div className="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors reinvestment-container" onClick={() => setIsReinvest(!isReinvest)}>
                   <input 
@@ -158,18 +172,16 @@ export default function DividendCalculator() {
                   </label>
                 </div>
               </div>
+              {/* 계산 실행 버튼 (Enlarged & Full Width inside panel) */}
+              <div className="mt-auto pt-10 flex justify-center w-full center-group">
+                <button 
+                  onClick={handleCalculate}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-6 px-8 rounded-xl transition-all shadow-xl shadow-blue-200 flex items-center justify-center gap-3 text-xl hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  시뮬레이션 계산하기
+                </button>
+              </div>
             </div>
-          </div>
-
-          {/* 계산 실행 버튼 (Enlarged & Full Width inside panel) */}
-          <div className="mt-auto pt-10">
-            <button 
-              onClick={handleCalculate}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-6 px-8 rounded-xl transition-all shadow-xl shadow-blue-200 flex items-center justify-center gap-3 text-xl hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <TrendingUp className="w-7 h-7" />
-              시뮬레이션 계산하기
-            </button>
           </div>
         </div>
 
@@ -188,12 +200,12 @@ export default function DividendCalculator() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-blue-600 text-white p-6 rounded-xl shadow-sm">
                   <p className="text-blue-100 text-sm mb-1">10년 후 예상 총 자산</p>
-                  <h3 className="text-3xl font-bold">{finalData?.총자산.toLocaleString()} 원</h3>
+                  <h3 className="text-3xl font-bold">{finalData?.총자산.toLocaleString()} 만원</h3>
                 </div>
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                   <p className="text-gray-500 text-sm mb-1">10년 차 연간 수령 배당금</p>
-                  <h3 className="text-3xl font-bold text-gray-800">{finalData?.당해배당금.toLocaleString()} 원</h3>
-                  <p className="text-sm text-green-600 mt-1">월 평균 {(finalData ? finalData.당해배당금 / 12 : 0).toLocaleString()} 원</p>
+                  <h3 className="text-3xl font-bold text-gray-800">{finalData?.당해배당금.toLocaleString()} 만원</h3>
+                  <p className="text-sm text-green-600 mt-1">월 평균 {(finalData ? Math.round(finalData.당해배당금 / 12) : 0).toLocaleString()} 만원</p>
                 </div>
               </div>
 
@@ -214,9 +226,9 @@ export default function DividendCalculator() {
                     <ComposedChart data={results} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} />
                       <XAxis dataKey="year" axisLine={false} tickLine={false} />
-                      <YAxis yAxisId="left" tickFormatter={(val) => `${(val / 10000).toFixed(0)}만`} axisLine={false} tickLine={false} />
-                      <YAxis yAxisId="right" orientation="right" tickFormatter={(val) => `${(val / 10000).toFixed(0)}만`} axisLine={false} tickLine={false} />
-                      <Tooltip formatter={(value) => `${value?.toLocaleString()} 원`} />
+                      <YAxis yAxisId="left" tickFormatter={(val) => `${val.toLocaleString()}만`} axisLine={false} tickLine={false} />
+                      <YAxis yAxisId="right" orientation="right" tickFormatter={(val) => `${val.toLocaleString()}만`} axisLine={false} tickLine={false} />
+                      <Tooltip formatter={(value) => `${value?.toLocaleString()} 만원`} />
                       <Legend />
                       <Bar yAxisId="right" dataKey="당해배당금" barSize={20} fill="#60A5FA" radius={[4, 4, 0, 0]} />
                       <Line yAxisId="left" type="monotone" dataKey="총자산" stroke="#2563EB" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />

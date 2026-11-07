@@ -36,7 +36,7 @@ body {
 }
 
 /* --- 1. 모던 입력 필드 (Input & Select) --- */
-input[type="number"], select {
+input[type="text"], input[type="number"], select {
   width: 100%;
   padding: 16px;
   font-size: 16px;
